@@ -1,19 +1,19 @@
 function init () {
-  loadOpenTabs()
+  getTabs()
 
-  chrome.tabs.onCreated.addListener(loadOpenTabs)
-  chrome.tabs.onMoved.addListener(loadOpenTabs)
-  chrome.tabs.onRemoved.addListener(loadOpenTabs)
+  chrome.tabs.onCreated.addListener(getTabs)
+  chrome.tabs.onMoved.addListener(getTabs)
+  chrome.tabs.onRemoved.addListener(getTabs)
   chrome.tabs.onUpdated.addListener(() => {
-    loadOpenTabs()
+    getTabs()
     checkActiveTab()
   })
-  chrome.tabs.onDetached.addListener(loadOpenTabs)
+  chrome.tabs.onDetached.addListener(getTabs)
   chrome.tabs.onActivated.addListener(checkActiveTab)
 
-  chrome.tabGroups.onCreated.addListener(loadOpenTabs)
-  chrome.tabGroups.onMoved.addListener(loadOpenTabs)
-  chrome.tabGroups.onRemoved.addListener(loadOpenTabs)
+  chrome.tabGroups.onCreated.addListener(getTabs)
+  chrome.tabGroups.onMoved.addListener(getTabs)
+  chrome.tabGroups.onRemoved.addListener(getTabs)
   chrome.tabGroups.onUpdated.addListener((group) => getGroupInfo(group.id))
 }
 
@@ -39,7 +39,7 @@ browserButtons.forEach((element) => {
   }
 })
 
-function loadOpenTabs () {
+function getTabs () {
   chrome.tabs.query({}, (tabs) => {
     const container = document.querySelector('#tabs')
     container.innerHTML = ''
