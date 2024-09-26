@@ -11,14 +11,9 @@
 </head>
 
 <body class="p-2 dark:bg-neutral-700 dark:text-white">
-    <!-- <div id="address-bar">
-        <input type="text" id="url-input" placeholder="Escribe una URL y presiona Enter o el botón" />
-        <button id="go-btn">Ir</button>
-    </div>
-    <div id="suggestions"></div> -->
     <main class="grid gap-1">
         <section class="flex gap-1">
-            <button data-chrome="downloads" title="Downloads"
+            <button data-browser="downloads" title="Downloads"
                 class="grid place-content-center w-12 h-12 rounded hover:bg-neutral-400 dark:hover:bg-neutral-900 select-none transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"
                     fill="currentColor">
@@ -27,7 +22,7 @@
                 </svg>
             </button>
 
-            <button data-chrome="extensions" title="Extensions"
+            <button data-browser="extensions" title="Extensions"
                 class="grid place-content-center w-12 h-12 rounded hover:bg-neutral-400 dark:hover:bg-neutral-900 select-none transition-colors">
                 <svg xmlns="http://www.w3.org/2400/svg" height="24" viewBox="0 -960 960 960" width="24"
                     fill="currentColor">
@@ -36,7 +31,7 @@
                 </svg>
             </button>
 
-            <button data-chrome="password-manager/passwords" title="Passwords"
+            <button data-browser="password-manager/passwords" title="Passwords"
                 class="grid place-content-center w-12 h-12 rounded hover:bg-neutral-400 dark:hover:bg-neutral-900 select-none transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"
                     fill="currentColor">
@@ -46,9 +41,9 @@
             </button>
         </section>
 
-        <div id="pinned" class="flex items-center gap-1"></div>
+        <section id="pinned" class="flex items-center gap-1"></section>
 
-        <div id="tabs-container" class="flex flex-col gap-1 overflow-hidden"></div>
+        <section id="tabs" class="flex flex-col gap-1 overflow-hidden"></section>
 
         <button data-action="new-tab" title="New Tab"
             class="flex items-center gap-2 p-2 rounded hover:bg-gray-300 dark:hover:bg-neutral-900">
