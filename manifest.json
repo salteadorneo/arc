@@ -16,7 +16,7 @@
                 "<all_urls>"
             ],
             "js": [
-                "js/bar.js"
+                "js/toolbar.js"
             ],
             "css": [
                 "css/toolbar.css"
