@@ -4,7 +4,9 @@ if (document.querySelector('search')) {
     document.querySelector('search').style.opacity = 1
     document.querySelector('search input').focus()
   } else {
-    document.querySelector('search').style.display = 'none'
     document.querySelector('search').style.opacity = 0
+    setTimeout(() => {
+      document.querySelector('search').style.display = 'none'
+    }, 300)
   }
 }

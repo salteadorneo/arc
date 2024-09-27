@@ -26,6 +26,8 @@ input.addEventListener('keydown', async event => {
     } else {
       window.open(`https://www.google.com/search?q=${query}`, '_blank')
     }
+    search.style.display = 'none'
+    search.style.opacity = 0
   }
 })
 
