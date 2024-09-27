@@ -9,7 +9,7 @@ html body>search {
     backdrop-filter: blur(4px) !important;
     display: none;
     opacity: 0;
-    transition: opacity .3s !important;
+    transition: all .5s !important;
 
     input {
         appearance: none !important;

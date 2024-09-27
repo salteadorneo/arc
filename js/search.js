@@ -1,4 +1,8 @@
 const search = document.createElement('search')
+search.onclick = () => {
+  search.style.display = 'none'
+  search.style.opacity = 0
+}
 
 const form = document.createElement('form')
 form.name = 'search'
@@ -10,6 +14,8 @@ input.placeholder = 'Search'
 input.type = 'search'
 input.autocomplete = 'off'
 input.spellcheck = false
+
+input.onclick = event => event.stopPropagation()
 
 input.addEventListener('keydown', async event => {
   if (event.key === 'Escape') {
