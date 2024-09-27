@@ -72,7 +72,12 @@ function getTabs () {
 
         const groupContainer = document.createElement('section')
         groupContainer.dataset.groupId = tab.groupId
-        groupContainer.className = 'select-none cursor-default'
+        groupContainer.className = 'flex flex-col gap-1 select-none cursor-default overflow-hidden transition-all max-h-7'
+
+        groupContainer.onclick = () => {
+          groupContainer.classList.toggle('max-h-7')
+          chrome.tabGroups.update(tab.groupId, { collapsed: groupContainer.classList.contains('max-h-7') })
+        }
 
         const groupTitle = document.createElement('h2')
         groupContainer.appendChild(groupTitle)
@@ -89,10 +94,14 @@ function getTabs () {
 function getGroupInfo (groupId) {
   chrome.tabGroups.get(groupId, (groupInfo) => {
     const container = document.querySelector(`[data-group-id="${groupId}"]`)
+
+    if (!groupInfo.collapsed) {
+      container.classList.remove('max-h-7')
+    }
+
     const groupTitle = container.querySelector('h2')
-    groupTitle.className = `flex items-center gap-2 text-sm font-bold mb-1 px-2 py-1 rounded transition-colors ${getColorClassForGroup(groupInfo.color)}`
-    const icon = '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640H447l-80-80H160v480l96-320h684L837-217q-8 26-29.5 41.5T760-160H160Zm84-80h516l72-240H316l-72 240Zm0 0 72-240-72 240Zm-84-400v-80 80Z"/></svg>'
-    // '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/></svg>'
+    groupTitle.className = `flex items-center gap-2 text-sm font-bold px-2 py-1 rounded transition-colors ${getColorClassForGroup(groupInfo.color)}`
+    const icon = groupInfo.collapsed ? '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640H447l-80-80H160v480l96-320h684L837-217q-8 26-29.5 41.5T760-160H160Zm84-80h516l72-240H316l-72 240Zm0 0 72-240-72 240Zm-84-400v-80 80Z"/></svg>'
     groupTitle.innerHTML = `${icon} ${groupInfo.title || 'Group'}`
   })
 }
@@ -100,7 +109,7 @@ function getGroupInfo (groupId) {
 function createTabElement (tab, container) {
   const tabElement = document.createElement('section')
   tabElement.dataset.tabId = tab.id
-  tabElement.className = 'group flex items-center justify-between gap-2 p-2 rounded hover:bg-neutral-400 dark:hover:bg-neutral-900 select-none transition-colors'
+  tabElement.className = 'group flex items-center justify-between gap-2 p-2 rounded bg-white/5 hover:bg-neutral-400 dark:hover:bg-neutral-900 select-none transition-colors'
   if (tab.active) {
     tabElement.classList.add(...ACTIVE_TAB)
   }
@@ -109,9 +118,13 @@ function createTabElement (tab, container) {
   const section = document.createElement('div')
   section.className = 'flex items-center gap-2 truncate'
 
+  if (tab.pinned) {
+    section.classList.add('w-full', 'justify-center')
+  }
+
   const favicon = document.createElement('img')
   favicon.src = tab.favIconUrl || ''
-  favicon.className = tab.pinned ? 'w-6 h-6' : 'w-4 h-4'
+  favicon.className = tab.pinned ? 'size-7' : 'size-4'
   section.appendChild(favicon)
 
   if (!tab.pinned) {
@@ -136,7 +149,8 @@ function createTabElement (tab, container) {
     tabElement.appendChild(closeButton)
   }
 
-  tabElement.onclick = () => {
+  tabElement.onclick = (event) => {
+    event.stopPropagation()
     chrome.tabs.update(tab.id, { active: true })
   }
 
