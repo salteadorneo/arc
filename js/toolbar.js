@@ -1,6 +1,5 @@
 const toolbar = document.createElement('toolbar')
 
-toolbar.style.maxHeight = '0px' // required
 toolbar.style.color = window.getComputedStyle(document.body).color || 'black'
 toolbar.style.backgroundColor = window.getComputedStyle(document.body).backgroundColor || 'white'
 
