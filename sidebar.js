@@ -37,6 +37,15 @@ browserButtons.forEach((element) => {
   element.onclick = () => {
     activeTabOrCreate(`${BROWSER}://${element.dataset.browser}/`)
   }
+
+  element.onmousedown = (event) => {
+    if (event.button === 1) {
+      const tabId = parseInt(element.dataset.tabId)
+      chrome.tabs.remove(tabId)
+      element.classList.remove(...ACTIVE_TAB)
+      delete element.dataset.tabId
+    }
+  }
 })
 
 function getTabs () {
@@ -51,6 +60,11 @@ function getTabs () {
 
     tabs.forEach(tab => {
       if (browserUrls.find(url => tab.url.startsWith(url))) {
+        browserButtons.forEach((element) => {
+          if (tab.url.startsWith(`${BROWSER}://${element.dataset.browser}`)) {
+            element.dataset.tabId = tab.id
+          }
+        })
         return
       }
       if (tab.groupId !== chrome.tabGroups.TAB_GROUP_ID_NONE && !groups.includes(tab.groupId)) {
@@ -86,7 +100,10 @@ function getGroupInfo (groupId) {
 function createTabElement (tab, container) {
   const tabElement = document.createElement('section')
   tabElement.dataset.tabId = tab.id
-  tabElement.className = `group flex items-center justify-between gap-2 p-2 rounded hover:bg-neutral-400 dark:hover:bg-neutral-900 select-none transition-colors ${tab.active && { ...ACTIVE_TAB }}`
+  tabElement.className = 'group flex items-center justify-between gap-2 p-2 rounded hover:bg-neutral-400 dark:hover:bg-neutral-900 select-none transition-colors'
+  if (tab.active) {
+    tabElement.classList.add(...ACTIVE_TAB)
+  }
   tabElement.draggable = true
 
   const section = document.createElement('div')

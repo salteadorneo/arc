@@ -5,14 +5,34 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Arc</title>
+    <title></title>
 
     <script src="/js/tailwind.js"></script>
 </head>
 
-<body class="p-2 dark:bg-neutral-700 dark:text-white">
-    <main class="grid gap-1">
-        <section class="flex gap-1">
+<body class="dark:bg-neutral-700 dark:text-white">
+    <main class="grid gap-1 h-full">
+        <section class="grid h-full">
+            <div class="flex flex-col gap-1 p-2 overflow-hidden">
+                <section id="pinned" class="flex items-center gap-1"></section>
+
+                <section id="tabs" class="flex flex-col gap-1"></section>
+
+                <button data-action="new-tab" title="New Tab"
+                    class="flex items-center gap-2 p-2 rounded hover:bg-gray-300 dark:hover:bg-neutral-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke-width="1.5"
+                        color="currentColor" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            d="M6 12h6m6 0h-6m0 0V6m0 6v6" />
+                    </svg>
+                    New Tab
+                </button>
+            </div>
+            <!-- <iframe class="hidden sm:flex w-full h-full"
+                src="https://www.aemet.es/es/eltiempo/prediccion/municipios/torrejon-del-rey-id19280"></iframe> -->
+        </section>
+
+        <section class="fixed bottom-0 p-2 w-full flex gap-1">
             <button data-browser="downloads" title="Downloads"
                 class="grid place-content-center w-12 h-12 rounded hover:bg-neutral-400 dark:hover:bg-neutral-900 select-none transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"
@@ -40,22 +60,7 @@
                 </svg>
             </button>
         </section>
-
-        <section id="pinned" class="flex items-center gap-1"></section>
-
-        <section id="tabs" class="flex flex-col gap-1 overflow-hidden"></section>
-
-        <button data-action="new-tab" title="New Tab"
-            class="flex items-center gap-2 p-2 rounded hover:bg-gray-300 dark:hover:bg-neutral-900">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke-width="1.5"
-                color="currentColor" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                    d="M6 12h6m6 0h-6m0 0V6m0 6v6" />
-            </svg>
-            New Tab
-        </button>
     </main>
-
     <script src="sidebar.js"></script>
 </body>
 
