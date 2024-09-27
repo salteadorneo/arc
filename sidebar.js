@@ -221,15 +221,3 @@ function getColorClassForGroup (color) {
   }
   return colorClasses[color] || 'bg-neutral-200 text-neutral-800'
 }
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'sendPlayerData') {
-    const { player } = request.data || {}
-    console.log(player)
-
-    const video = document.querySelector('video')
-    if (video) {
-      //
-    }
-  }
-})
