@@ -220,8 +220,14 @@ function checkActiveTab () {
 }
 
 document.querySelectorAll('[data-action=new-tab]').forEach((element) => {
-  element.onclick = () => {
-    chrome.tabs.create({})
+  element.onclick = async () => {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+
+    const newTab = await chrome.tabs.create({ })
+
+    if (tab.groupId !== chrome.tabGroups.TAB_GROUP_ID_NONE) {
+      chrome.tabs.group({ groupId: tab.groupId, tabIds: newTab.id })
+    }
   }
 })
 
