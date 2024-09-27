@@ -140,13 +140,26 @@ function createTabElement (tab, container) {
     chrome.tabs.update(tab.id, { active: true })
   }
 
+  tabElement.ondblclick = () => {
+    chrome.tabs.update(tab.id, { pinned: !tab.pinned })
+  }
+
+  let timeoutToPin
   tabElement.onmousedown = (event) => {
     if (event.button === 1) {
       chrome.tabs.remove(tab.id)
     }
+    timeoutToPin = setTimeout(() => {
+      chrome.tabs.update(tab.id, { pinned: !tab.pinned })
+    }, 1000)
+  }
+  tabElement.onmouseup = () => {
+    clearTimeout(timeoutToPin)
   }
 
   tabElement.addEventListener('dragstart', (event) => {
+    clearTimeout(timeoutToPin)
+
     event.dataTransfer.setData('text/plain', tab.id)
   })
 

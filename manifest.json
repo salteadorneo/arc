@@ -37,14 +37,14 @@
         }
     },
     "side_panel": {
-        "default_path": "sidebar.html"
+        "default_path": "sidepanel.html"
     },
     "commands": {
         "open": {
             "suggested_key": {
                 "default": "Ctrl+Shift+S"
             },
-            "description": "Open sidebar"
+            "description": "Open sidepanel"
         },
         "toolbar": {
             "suggested_key": {
