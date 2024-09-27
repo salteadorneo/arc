@@ -20,4 +20,16 @@ chrome.commands.onCommand.addListener((command) => {
       })
     })
   }
+
+  if (command === 'search') {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const tabId = tabs[0]?.id
+      if (!tabId) return
+
+      chrome.scripting.executeScript({
+        target: { tabId },
+        files: ['js/search-open.js']
+      })
+    })
+  }
 })

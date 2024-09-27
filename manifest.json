@@ -16,10 +16,12 @@
                 "<all_urls>"
             ],
             "js": [
-                "js/toolbar.js"
+                "js/toolbar.js",
+                "js/search.js"
             ],
             "css": [
-                "css/toolbar.css"
+                "css/toolbar.css",
+                "css/search.css"
             ]
         }
     ],
@@ -49,6 +51,12 @@
                 "default": "Ctrl+Shift+Q"
             },
             "description": "Toogle toolbar"
+        },
+        "search": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+Z"
+            },
+            "description": "Open search"
         }
     }
 }
