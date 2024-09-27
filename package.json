@@ -2,20 +2,17 @@
   "name": "arc-extension",
   "version": "1.0.0",
   "description": "",
-  "main": "background.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "standard": "^17.1.2"
-  },
-  "eslintConfig": {
-    "extends": "./node_modules/standard/eslintrc.json",
-    "env": {
-      "webextensions": true
-    }
+    "astro": "^4.15.9"
   }
 }
