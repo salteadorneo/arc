@@ -29,8 +29,8 @@ const BROWSER = navigator.userAgent.includes('Edg')
 
 const ACTIVE_TAB = ['bg-neutral-300', 'dark:bg-neutral-800']
 
-const browserButtons = document.querySelectorAll('[data-browser]')
 const browserUrls = []
+const browserButtons = document.querySelectorAll('[data-browser]')
 browserButtons.forEach((element) => {
   browserUrls.push(`${BROWSER}://${element.dataset.browser}`)
 
