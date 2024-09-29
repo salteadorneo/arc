@@ -1,3 +1,7 @@
+const EDIT_ICON = "<svg xmlns='http://www.w3.org/2000/svg' height='18' viewBox='0 -960 960 960' width='18' fill='currentColor'><path d='M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z' /></svg>"
+const FOLDER_ICON = '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/></svg>'
+const FOLDER_OPEN_ICON = '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640H447l-80-80H160v480l96-320h684L837-217q-8 26-29.5 41.5T760-160H160Zm84-80h516l72-240H316l-72 240Zm0 0 72-240-72 240Zm-84-400v-80 80Z"/></svg>'
+
 function init () {
   getTabs()
 
@@ -49,44 +53,66 @@ browserButtons.forEach((element) => {
 })
 
 function getTabs () {
-  chrome.tabs.query({}, (tabs) => {
-    const container = document.querySelector('#tabs')
-    container.innerHTML = ''
+  chrome.windows.getCurrent({ populate: true }, (window) => {
+    chrome.tabs.query({ windowId: window.id }, (tabs) => {
+      const container = document.querySelector('#tabs')
+      container.innerHTML = ''
 
-    const pinnedContainer = document.querySelector('#pinned')
-    pinnedContainer.innerHTML = ''
+      const pinnedContainer = document.querySelector('#pinned')
+      pinnedContainer.innerHTML = ''
 
-    const groups = []
+      const groups = []
 
-    tabs.forEach(tab => {
-      if (browserUrls.find(url => tab.url.startsWith(url))) {
-        browserButtons.forEach((element) => {
-          if (tab.url.startsWith(`${BROWSER}://${element.dataset.browser}`)) {
-            element.dataset.tabId = tab.id
-          }
-        })
-        return
-      }
-      if (tab.groupId !== chrome.tabGroups.TAB_GROUP_ID_NONE && !groups.includes(tab.groupId)) {
-        groups.push(tab.groupId)
-
-        const groupContainer = document.createElement('section')
-        groupContainer.dataset.groupId = tab.groupId
-        groupContainer.className = 'flex flex-col gap-1 select-none cursor-default overflow-hidden transition-all max-h-7'
-
-        groupContainer.onclick = () => {
-          groupContainer.classList.toggle('max-h-7')
-          chrome.tabGroups.update(tab.groupId, { collapsed: groupContainer.classList.contains('max-h-7') })
+      tabs.forEach(tab => {
+        if (browserUrls.find(url => tab.url.startsWith(url))) {
+          browserButtons.forEach((element) => {
+            if (tab.url.startsWith(`${BROWSER}://${element.dataset.browser}`)) {
+              element.dataset.tabId = tab.id
+            }
+          })
+          return
         }
+        if (tab.groupId !== chrome.tabGroups.TAB_GROUP_ID_NONE && !groups.includes(tab.groupId)) {
+          groups.push(tab.groupId)
 
-        const groupTitle = document.createElement('h2')
-        groupContainer.appendChild(groupTitle)
+          const groupContainer = document.createElement('section')
+          groupContainer.dataset.groupId = tab.groupId
+          groupContainer.className = 'flex flex-col gap-1 select-none cursor-default overflow-hidden transition-all min-h-7 max-h-7'
 
-        container.appendChild(groupContainer)
+          groupContainer.onclick = () => {
+            groupContainer.classList.toggle('max-h-7')
+            chrome.tabGroups.update(tab.groupId, { collapsed: groupContainer.classList.contains('max-h-7') })
+          }
 
-        getGroupInfo(tab.groupId)
-      }
-      createTabElement(tab, container)
+          const groupTitle = document.createElement('section')
+          groupTitle.className = 'group flex items-center gap-2 text-sm font-bold px-2 py-1 rounded transition-colors'
+
+          const icon = document.createElement('span')
+          groupTitle.appendChild(icon)
+
+          const title = document.createElement('h2')
+          title.className = 'inline outline-none truncate'
+          groupTitle.appendChild(title)
+
+          const editButton = document.createElement('button')
+          editButton.innerHTML = EDIT_ICON
+          editButton.className = 'hidden group-hover:grid place-content-center size-4 outline-none'
+          groupTitle.appendChild(editButton)
+
+          editButton.onclick = (event) => {
+            event.stopPropagation()
+            title.contentEditable = true
+            title.innerText = ''
+            title.focus()
+          }
+
+          groupContainer.appendChild(groupTitle)
+          container.appendChild(groupContainer)
+
+          getGroupInfo(tab.groupId)
+        }
+        createTabElement(tab, container)
+      })
     })
   })
 }
@@ -99,10 +125,19 @@ function getGroupInfo (groupId) {
       container.classList.remove('max-h-7')
     }
 
-    const groupTitle = container.querySelector('h2')
-    groupTitle.className = `flex items-center gap-2 text-sm font-bold px-2 py-1 rounded transition-colors ${getColorClassForGroup(groupInfo.color)}`
-    const icon = groupInfo.collapsed ? '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640H447l-80-80H160v480l96-320h684L837-217q-8 26-29.5 41.5T760-160H160Zm84-80h516l72-240H316l-72 240Zm0 0 72-240-72 240Zm-84-400v-80 80Z"/></svg>'
-    groupTitle.innerHTML = `${icon} ${groupInfo.title || 'Group'}`
+    const groupTitle = container.querySelector('section')
+    groupTitle.classList.add(...getColorClassForGroup(groupInfo.color).split(' '))
+
+    const icon = groupTitle.querySelector('span')
+    icon.innerHTML = groupInfo.collapsed ? FOLDER_ICON : FOLDER_OPEN_ICON
+
+    const title = groupTitle.querySelector('h2')
+    title.innerHTML = `${groupInfo.title || 'Group'}`
+
+    title.onblur = () => {
+      title.contentEditable = false
+      chrome.tabGroups.update(groupId, { title: title.innerText })
+    }
   })
 }
 
@@ -117,6 +152,7 @@ function createTabElement (tab, container) {
 
   const section = document.createElement('div')
   section.className = 'flex items-center gap-2 truncate'
+  tabElement.appendChild(section)
 
   if (tab.pinned) {
     section.classList.add('w-full', 'justify-center')
@@ -132,21 +168,16 @@ function createTabElement (tab, container) {
     title.innerText = tab.title
     title.className = 'truncate'
     section.appendChild(title)
-  }
 
-  tabElement.appendChild(section)
-
-  const closeButton = document.createElement('span')
-  closeButton.innerText = '✖'
-  closeButton.className = 'hidden group-hover:grid place-content-center w-4 h-4 select-none'
-
-  closeButton.onclick = (event) => {
-    event.stopPropagation()
-    chrome.tabs.remove(tab.id)
-  }
-
-  if (!tab.pinned) {
+    const closeButton = document.createElement('button')
+    closeButton.innerText = '✖'
+    closeButton.className = 'hidden group-hover:grid place-content-center size-4'
     tabElement.appendChild(closeButton)
+
+    closeButton.onclick = (event) => {
+      event.stopPropagation()
+      chrome.tabs.remove(tab.id)
+    }
   }
 
   tabElement.onclick = (event) => {
@@ -154,26 +185,16 @@ function createTabElement (tab, container) {
     chrome.tabs.update(tab.id, { active: true })
   }
 
-  tabElement.ondblclick = () => {
-    chrome.tabs.update(tab.id, { pinned: !tab.pinned })
-  }
-
-  let timeoutToPin
   tabElement.onmousedown = (event) => {
     if (event.button === 1) {
+      if (tab.pinned) {
+        return
+      }
       chrome.tabs.remove(tab.id)
     }
-    timeoutToPin = setTimeout(() => {
-      chrome.tabs.update(tab.id, { pinned: !tab.pinned })
-    }, 1000)
-  }
-  tabElement.onmouseup = () => {
-    clearTimeout(timeoutToPin)
   }
 
   tabElement.addEventListener('dragstart', (event) => {
-    clearTimeout(timeoutToPin)
-
     event.dataTransfer.setData('text/plain', tab.id)
   })
 
@@ -188,12 +209,27 @@ function createTabElement (tab, container) {
       const tabs = await chrome.tabs.query({})
       const draggedTab = tabs.find(t => t.id === parseInt(draggedTabId))
       chrome.tabs.move(draggedTab.id, { index: tab.index })
+
+      if (draggedTab.groupId !== tab.groupId) {
+        chrome.tabs.group({ groupId: tab.groupId, tabIds: draggedTab.id })
+      }
+      if (draggedTab.pinned !== tab.pinned) {
+        chrome.tabs.update(draggedTab.id, { pinned: tab.pinned })
+      }
     }
   })
 
   if (tab.pinned) {
     const pinnedContainer = document.querySelector('#pinned')
     pinnedContainer.appendChild(tabElement)
+
+    if (pinnedContainer.childElementCount >= 8) {
+      pinnedContainer.classList.add('grid-cols-4')
+      pinnedContainer.classList.remove('grid-flow-col', 'justify-stretch')
+    } else {
+      pinnedContainer.classList.remove('grid-cols-4')
+      pinnedContainer.classList.add('grid-flow-col', 'justify-stretch')
+    }
     return
   }
 
@@ -208,13 +244,15 @@ function createTabElement (tab, container) {
 }
 
 function checkActiveTab () {
-  chrome.tabs.query({}, (tabs) => {
-    tabs.forEach(tab => {
-      const element = document.querySelector(`[data-tab-id="${tab.id}"]`)
-      element?.classList.remove(...ACTIVE_TAB)
-      if (tab.active) {
-        element?.classList.add(...ACTIVE_TAB)
-      }
+  chrome.windows.getCurrent({ populate: true }, (window) => {
+    chrome.tabs.query({ windowId: window.id }, (tabs) => {
+      tabs.forEach(tab => {
+        const element = document.querySelector(`[data-tab-id="${tab.id}"]`)
+        element?.classList.remove(...ACTIVE_TAB)
+        if (tab.active) {
+          element?.classList.add(...ACTIVE_TAB)
+        }
+      })
     })
   })
 }
@@ -232,12 +270,14 @@ document.querySelectorAll('[data-action=new-tab]').forEach((element) => {
 })
 
 function activeTabOrCreate (url) {
-  chrome.tabs.query({ url }, (tabs) => {
-    if (tabs.length) {
-      chrome.tabs.update(tabs[0].id, { active: true })
-    } else {
-      chrome.tabs.create({ url })
-    }
+  chrome.windows.getCurrent({ populate: true }, (window) => {
+    chrome.tabs.query({ url, windowId: window.id }, (tabs) => {
+      if (tabs.length) {
+        chrome.tabs.update(tabs[0].id, { active: true })
+      } else {
+        chrome.tabs.create({ url, windowId: window.id })
+      }
+    })
   })
 }
 
