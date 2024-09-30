@@ -91,19 +91,26 @@ function getTabs () {
           groupTitle.appendChild(icon)
 
           const title = document.createElement('h2')
-          title.className = 'inline outline-none truncate'
+          title.className = 'w-full outline-none truncate'
           groupTitle.appendChild(title)
+
+          title.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+              title.blur()
+            }
+          })
 
           const editButton = document.createElement('button')
           editButton.innerHTML = EDIT_ICON
-          editButton.className = 'hidden group-hover:grid place-content-center size-4 outline-none'
+          editButton.className = 'hidden group-hover:grid place-content-center size-4 outline-none transition-all'
           groupTitle.appendChild(editButton)
 
           editButton.onclick = (event) => {
             event.stopPropagation()
             title.contentEditable = true
-            title.innerText = ''
+            title.classList.remove('truncate')
             title.focus()
+            document.execCommand('selectAll', false, null)
           }
 
           groupContainer.appendChild(groupTitle)
@@ -136,6 +143,7 @@ function getGroupInfo (groupId) {
 
     title.onblur = () => {
       title.contentEditable = false
+      title.classList.add('truncate')
       chrome.tabGroups.update(groupId, { title: title.innerText })
     }
   })
@@ -171,7 +179,7 @@ function createTabElement (tab, container) {
 
     const closeButton = document.createElement('button')
     closeButton.innerText = '✖'
-    closeButton.className = 'hidden group-hover:grid place-content-center size-4'
+    closeButton.className = 'hidden group-hover:grid place-content-center size-4 outline-none transition-all'
     tabElement.appendChild(closeButton)
 
     closeButton.onclick = (event) => {
