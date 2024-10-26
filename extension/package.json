@@ -1,11 +1,8 @@
 {
   "name": "arc-extension",
   "version": "1.0.0",
-  "description": "",
-  "main": "background.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "description": "A Chrome extension inspired by the Arc browser.",
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",

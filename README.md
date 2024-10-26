@@ -1,6 +1,6 @@
-# Arc Sidebar Extension
+# Arc Extension
 
-A Chrome extension to manage vertical tabs
+A Chrome extension inspired by the Arc browser.
 
 ![image](https://github.com/user-attachments/assets/709e286d-278f-4830-af35-0838ffc5adf8)
 
@@ -8,7 +8,6 @@ A Chrome extension to manage vertical tabs
 >
 > This project is still in development.
 >
-
 
 ## Installation locally
 
