@@ -317,8 +317,15 @@ document.querySelectorAll('[data-action=new-group]').forEach((element) => {
 })
 
 document.querySelectorAll('input[type="color"]').forEach((element) => {
+  chrome.storage.local.get(['color'], (result) => {
+    if (!result.color) return
+    element.value = result.color
+    document.body.style.backgroundColor = element.value
+  })
+
   element.oninput = () => {
     document.body.style.backgroundColor = element.value
+    chrome.storage.local.set({ color: element.value })
   }
 })
 

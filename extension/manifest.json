@@ -8,7 +8,8 @@
         "tabGroups",
         "sidePanel",
         "activeTab",
-        "scripting"
+        "scripting",
+        "storage"
     ],
     "content_scripts": [
         {
