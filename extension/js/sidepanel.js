@@ -3,6 +3,8 @@ const FOLDER_ICON = '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox
 const FOLDER_OPEN_ICON = '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640H447l-80-80H160v480l96-320h684L837-217q-8 26-29.5 41.5T760-160H160Zm84-80h516l72-240H316l-72 240Zm0 0 72-240-72 240Zm-84-400v-80 80Z"/></svg>'
 const PLUS_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke-width="1.5" color="currentColor" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 12h6m6 0h-6m0 0V6m0 6v6" /></svg>'
 
+const GROUP_ACTIVE_CLASS = 'max-h-9'
+
 const BROWSER = navigator.userAgent.includes('Edg')
   ? 'edge'
   : navigator.userAgent.includes('OPR')
@@ -76,11 +78,11 @@ function getTabs () {
 
           const groupContainer = document.createElement('section')
           groupContainer.dataset.groupId = tab.groupId
-          groupContainer.className = 'flex flex-col gap-1 select-none cursor-default overflow-hidden transition-all min-h-9 max-h-9'
+          groupContainer.className = `flex flex-col gap-1 select-none cursor-default overflow-hidden transition-all min-h-9 ${GROUP_ACTIVE_CLASS}`
 
           groupContainer.onclick = () => {
-            groupContainer.classList.toggle('max-h-9')
-            chrome.tabGroups.update(tab.groupId, { collapsed: groupContainer.classList.contains('max-h-9') })
+            groupContainer.classList.toggle(GROUP_ACTIVE_CLASS)
+            chrome.tabGroups.update(tab.groupId, { collapsed: groupContainer.classList.contains(GROUP_ACTIVE_CLASS) })
           }
 
           const groupTitle = document.createElement('section')
@@ -134,7 +136,7 @@ function getGroupInfo (groupId) {
     const container = document.querySelector(`[data-group-id="${groupId}"]`)
 
     if (!groupInfo.collapsed) {
-      container.classList.remove('max-h-7')
+      container.classList.remove(GROUP_ACTIVE_CLASS)
     }
 
     const groupTitle = container.querySelector('section')
