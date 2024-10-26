@@ -118,6 +118,12 @@ function getTabs () {
         }
         createTabElement(tab, container)
       })
+
+      createTabElement({
+        title: 'New Tab',
+        icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke-width="1.5" color="currentColor" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 12h6m6 0h-6m0 0V6m0 6v6" /></svg>',
+        'data-action': 'new-tab'
+      }, container)
     })
   })
 }
@@ -159,6 +165,10 @@ function createTabElement (tab, container) {
   }
   tabElement.draggable = true
 
+  if (tab['data-action']) {
+    tabElement.dataset.action = tab['data-action']
+  }
+
   const section = document.createElement('div')
   section.className = 'flex items-center gap-2 truncate'
   tabElement.appendChild(section)
@@ -167,10 +177,16 @@ function createTabElement (tab, container) {
     section.classList.add('w-full', 'justify-center')
   }
 
-  const favicon = document.createElement('img')
-  favicon.src = tab.favIconUrl || ''
-  favicon.className = tab.pinned ? 'size-7' : 'size-4'
-  section.appendChild(favicon)
+  if (tab.icon) {
+    const icon = document.createElement('span')
+    icon.innerHTML = tab.icon
+    section.appendChild(icon)
+  } else {
+    const favicon = document.createElement('img')
+    favicon.src = tab.favIconUrl || ''
+    favicon.className = tab.pinned ? 'size-6' : 'size-4'
+    section.appendChild(favicon)
+  }
 
   if (!tab.pinned) {
     const title = document.createElement('span')
@@ -178,27 +194,34 @@ function createTabElement (tab, container) {
     title.className = 'truncate text-white mix-blend-difference'
     section.appendChild(title)
 
-    const closeButton = document.createElement('button')
-    closeButton.innerText = '✖'
-    closeButton.className = 'hidden group-hover:grid place-content-center size-4 outline-none transition-all text-white mix-blend-difference'
-    tabElement.appendChild(closeButton)
+    if (!tab.icon) {
+      const closeButton = document.createElement('button')
+      closeButton.innerText = '✖'
+      closeButton.className = 'hidden group-hover:grid place-content-center size-4 outline-none transition-all text-white mix-blend-difference'
+      tabElement.appendChild(closeButton)
 
-    closeButton.onclick = (event) => {
-      event.stopPropagation()
-      chrome.tabs.remove(tab.id)
+      closeButton.onclick = (e) => {
+        e.stopPropagation()
+        if (!tab.id) return
+        chrome.tabs.remove(tab.id)
+      }
     }
   }
 
-  tabElement.onclick = (event) => {
+  tabElement.onclick = async (event) => {
     event.stopPropagation()
+    if (!tab.id) {
+      const url = `${BROWSER}://newtab`
+      await chrome.tabs.create({ url })
+      return
+    }
     chrome.tabs.update(tab.id, { active: true })
   }
 
   tabElement.onmousedown = (event) => {
+    event.stopPropagation()
     if (event.button === 1) {
-      if (tab.pinned) {
-        return
-      }
+      if (!tab.id || tab.pinned) return
       chrome.tabs.remove(tab.id)
     }
   }
