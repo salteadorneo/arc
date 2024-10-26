@@ -1,6 +1,7 @@
 const EDIT_ICON = "<svg xmlns='http://www.w3.org/2000/svg' height='18' viewBox='0 -960 960 960' width='18' fill='currentColor'><path d='M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z' /></svg>"
 const FOLDER_ICON = '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/></svg>'
 const FOLDER_OPEN_ICON = '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640H447l-80-80H160v480l96-320h684L837-217q-8 26-29.5 41.5T760-160H160Zm84-80h516l72-240H316l-72 240Zm0 0 72-240-72 240Zm-84-400v-80 80Z"/></svg>'
+const PLUS_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke-width="1.5" color="currentColor" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 12h6m6 0h-6m0 0V6m0 6v6" /></svg>'
 
 const BROWSER = navigator.userAgent.includes('Edg')
   ? 'edge'
@@ -75,15 +76,15 @@ function getTabs () {
 
           const groupContainer = document.createElement('section')
           groupContainer.dataset.groupId = tab.groupId
-          groupContainer.className = 'flex flex-col gap-1 select-none cursor-default overflow-hidden transition-all min-h-7 max-h-7'
+          groupContainer.className = 'flex flex-col gap-1 select-none cursor-default overflow-hidden transition-all min-h-9 max-h-9'
 
           groupContainer.onclick = () => {
-            groupContainer.classList.toggle('max-h-7')
-            chrome.tabGroups.update(tab.groupId, { collapsed: groupContainer.classList.contains('max-h-7') })
+            groupContainer.classList.toggle('max-h-9')
+            chrome.tabGroups.update(tab.groupId, { collapsed: groupContainer.classList.contains('max-h-9') })
           }
 
           const groupTitle = document.createElement('section')
-          groupTitle.className = 'group flex items-center gap-2 text-sm font-bold px-2 py-1 rounded transition-colors'
+          groupTitle.className = 'group flex items-center justify-between gap-2 p-2 rounded hover:bg-white/15 select-none transition-colors text-sm font-medium'
 
           const icon = document.createElement('span')
           groupTitle.appendChild(icon)
@@ -121,7 +122,7 @@ function getTabs () {
 
       createTabElement({
         title: 'New Tab',
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke-width="1.5" color="currentColor" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 12h6m6 0h-6m0 0V6m0 6v6" /></svg>',
+        icon: PLUS_ICON,
         'data-action': 'new-tab'
       }, container)
     })
@@ -333,14 +334,14 @@ function activeTabOrCreate (url) {
 
 function getColorClassForGroup (color) {
   const colorClasses = {
-    blue: 'bg-blue-200 text-blue-800',
-    red: 'bg-red-200 text-red-800',
-    yellow: 'bg-yellow-200 text-yellow-800',
-    green: 'bg-green-200 text-green-800',
-    pink: 'bg-pink-200 text-pink-800',
-    purple: 'bg-purple-200 text-purple-800',
-    cyan: 'bg-cyan-200 text-cyan-800',
-    grey: 'bg-gray-200 text-gray-800'
+    blue: 'text-blue-500',
+    red: 'text-red-500',
+    yellow: 'text-yellow-500',
+    green: 'text-green-500',
+    pink: 'text-pink-500',
+    purple: 'text-purple-500',
+    cyan: 'text-cyan-500',
+    grey: 'text-gray-500'
   }
-  return colorClasses[color] || 'bg-neutral-200 text-neutral-800'
+  return colorClasses[color] || 'text-neutral-500'
 }
