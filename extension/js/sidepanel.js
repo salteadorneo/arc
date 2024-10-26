@@ -140,7 +140,7 @@ function getGroupInfo (groupId) {
     }
 
     const groupTitle = container.querySelector('section')
-    groupTitle.classList.add(...getColorClassForGroup(groupInfo.color).split(' '))
+    groupTitle.classList.add(`text-${groupInfo.color}-500`)
 
     const icon = groupTitle.querySelector('span')
     icon.innerHTML = groupInfo.collapsed ? FOLDER_ICON : FOLDER_OPEN_ICON
@@ -332,18 +332,4 @@ function activeTabOrCreate (url) {
       }
     })
   })
-}
-
-function getColorClassForGroup (color) {
-  const colorClasses = {
-    blue: 'text-blue-500',
-    red: 'text-red-500',
-    yellow: 'text-yellow-500',
-    green: 'text-green-500',
-    pink: 'text-pink-500',
-    purple: 'text-purple-500',
-    cyan: 'text-cyan-500',
-    grey: 'text-gray-500'
-  }
-  return colorClasses[color] || 'text-neutral-500'
 }
