@@ -277,6 +277,16 @@ document.querySelectorAll('[data-action=new-tab]').forEach((element) => {
   }
 })
 
+document.querySelectorAll('[data-action=new-group]').forEach((element) => {
+  element.onclick = async () => {
+    chrome.tabs.create({}, (tab) => {
+      chrome.tabs.group({ tabIds: [tab.id] }, (groupId) => {
+        chrome.tabGroups.update(groupId, { title: 'Group' })
+      })
+    })
+  }
+})
+
 function activeTabOrCreate (url) {
   chrome.windows.getCurrent({ populate: true }, (window) => {
     chrome.tabs.query({ url, windowId: window.id }, (tabs) => {

@@ -46,14 +46,26 @@
                 </button>
             </div>
 
-            <button data-action="new-tab" title="New Tab"
-                class="grid place-content-center w-12 h-12 rounded bg-white/5 hover:bg-neutral-400 dark:hover:bg-neutral-900 select-none transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke-width="1.5"
-                    color="currentColor" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                        d="M6 12h6m6 0h-6m0 0V6m0 6v6" />
-                </svg>
-            </button>
+            <div class="flex gap-1">
+                <button data-action="new-group" title="New Group"
+                    class="grid place-content-center w-12 h-12 rounded bg-white/5 hover:bg-neutral-400 dark:hover:bg-neutral-900 select-none transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"
+                        fill="currentColor">
+                        <path
+                            d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z" />
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            d="M6 12h6m6 0h-6m0 0V6m0 6v6" />
+                    </svg>
+                </button>
+                <button data-action="new-tab" title="New Tab"
+                    class="grid place-content-center w-12 h-12 rounded bg-white/5 hover:bg-neutral-400 dark:hover:bg-neutral-900 select-none transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke-width="1.5"
+                        color="currentColor" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            d="M6 12h6m6 0h-6m0 0V6m0 6v6" />
+                    </svg>
+                </button>
+            </div>
         </section>
     </main>
     <script src="/js/sidepanel.js"></script>
