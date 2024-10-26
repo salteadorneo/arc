@@ -4,22 +4,18 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title></title>
-
     <link rel="stylesheet" href="/css/sidepanel.css" />
-
     <script src="/js/tailwind.js"></script>
 </head>
 
-<body class="dark:bg-neutral-700 dark:text-white">
+<body class="dark:bg-[#3c3c3c] dark:text-white bg-white text-black">
     <main class="flex flex-col justify-between gap-1 py-2 h-screen">
         <section id="pinned" class="px-2 grid grid-flow-col justify-stretch gap-1"></section>
         <section id="tabs" class="flex flex-1 flex-col gap-1 px-2 overflow-x-hidden overflow-y-auto"></section>
         <section class="px-2 flex items-center justify-between gap-2">
-            <div class="flex gap-1">
+            <div class="flex items-center gap-1">
                 <button data-browser="downloads" title="Downloads"
-                    class="grid place-content-center w-12 h-12 rounded bg-white/5 hover:bg-neutral-400 dark:hover:bg-neutral-900 select-none transition-colors">
+                    class="grid place-content-center size-9 rounded hover:bg-white/15 text-white mix-blend-difference select-none transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"
                         fill="currentColor">
                         <path
@@ -28,8 +24,8 @@
                 </button>
 
                 <button data-browser="extensions" title="Extensions"
-                    class="grid place-content-center w-12 h-12 rounded bg-white/5 hover:bg-neutral-400 dark:hover:bg-neutral-900 select-none transition-colors">
-                    <svg xmlns="http://www.w3.org/2400/svg" height="24" viewBox="0 -960 960 960" width="24"
+                    class="grid place-content-center size-9 rounded hover:bg-white/15 text-white mix-blend-difference select-none transition-colors">
+                    <svg xmlns="http://www.w3.org/2400/svg" height="20" viewBox="0 -960 960 960" width="20"
                         fill="currentColor">
                         <path
                             d="M384-144H216q-29.7 0-50.85-21.15Q144-186.3 144-216v-168q40-2 68-29.5t28-66.5q0-39-28-66.5T144-576v-168q0-29.7 21.15-50.85Q186.3-816 216-816h168q0-40 27.77-68 27.78-28 68-28Q520-912 548-884.16q28 27.84 28 68.16h168q29.7 0 50.85 21.15Q816-773.7 816-744v168q40 0 68 27.77 28 27.78 28 68Q912-440 884.16-412q-27.84 28-68.16 28v168q0 29.7-21.15 50.85Q773.7-144 744-144H576q-2-40-29.38-68t-66.5-28q-39.12 0-66.62 28-27.5 28-29.5 68Zm-168-72h112q20-45 61.5-70.5T480-312q49 0 90.5 25.5T632-216h112v-240h72q9.6 0 16.8-7.2 7.2-7.2 7.2-16.8 0-9.6-7.2-16.8-7.2-7.2-16.8-7.2h-72v-240H504v-72q0-9.6-7.2-16.8-7.2-7.2-16.8-7.2-9.6 0-16.8 7.2-7.2 7.2-7.2 16.8v72H216v112q45 20 70.5 61.5T312-480q0 50.21-25.5 91.6Q261-347 216-328v112Zm264-264Z" />
@@ -37,18 +33,47 @@
                 </button>
 
                 <button data-browser="password-manager/passwords" title="Passwords"
-                    class="grid place-content-center w-12 h-12 rounded bg-white/5 hover:bg-neutral-400 dark:hover:bg-neutral-900 select-none transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"
+                    class="grid place-content-center size-9 rounded hover:bg-white/15 text-white mix-blend-difference select-none transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"
                         fill="currentColor">
                         <path
                             d="M288-384q-40 0-68-28t-28-68q0-40 28-68t68-28q40 0 68 28t28 68q0 40-28 68t-68 28Zm0 144q-100 0-170-70T48-480q0-100 70-170t170-70q65 0 120 32.5t88 87.5h344l120 120-180 168-84-60-72 60-96-72h-20q-24 68-85.5 106T288-240Zm0-72q63 0 111-40.5T454-456h98l70 52 71-59 81 58 82-76-46-47H449q-19-53-62.5-86.5T288-648q-70 0-119 49t-49 119q0 70 49 119t119 49Z" />
                     </svg>
                 </button>
+
+                <button data-browser="settings/appearance" title="Appearance"
+                    class="grid place-content-center size-9 rounded hover:bg-white/15 text-white mix-blend-difference select-none transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"
+                        fill="currentColor">
+                        <path
+                            d="M480-80q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-83 32.5-156t88-127Q256-817 330-848.5T488-880q80 0 151 27.5t124.5 76q53.5 48.5 85 115T880-518q0 115-70 176.5T640-280h-74q-9 0-12.5 5t-3.5 11q0 12 15 34.5t15 51.5q0 50-27.5 74T480-80Zm0-400Zm-220 40q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm120-160q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm200 0q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm120 160q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17ZM480-160q9 0 14.5-5t5.5-13q0-14-15-33t-15-57q0-42 29-67t71-25h70q66 0 113-38.5T800-518q0-121-92.5-201.5T488-800q-136 0-232 93t-96 227q0 133 93.5 226.5T480-160Z" />
+                    </svg>
+                </button>
+
+                <button data-action="new-tab" data-url="https://chromewebstore.google.com/category/themes/colors"
+                    title="Themes"
+                    class="grid place-content-center size-9 rounded hover:bg-white/15 text-white mix-blend-difference select-none transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"
+                        fill="currentColor">
+                        <path
+                            d="M440-80q-33 0-56.5-23.5T360-160v-160H240q-33 0-56.5-23.5T160-400v-280q0-66 47-113t113-47h480v440q0 33-23.5 56.5T720-320H600v160q0 33-23.5 56.5T520-80h-80ZM240-560h480v-200h-40v160h-80v-160h-40v80h-80v-80H320q-33 0-56.5 23.5T240-680v120Zm0 160h480v-80H240v80Zm0 0v-80 80Z" />
+                    </svg>
+                </button>
+
+                <label title="Color"
+                    class="grid place-content-center size-9 rounded hover:bg-white/15 text-white mix-blend-difference select-none transition-colors cursor-pointer">
+                    <input type="color" title="Theme Color" class="w-0 h-0" /><!--w-8 h-8 rounded-full-->
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"
+                        fill="#e8eaed">
+                        <path
+                            d="M346-140 100-386q-10-10-15-22t-5-25q0-13 5-25t15-22l230-229-106-106 62-65 400 400q10 10 14.5 22t4.5 25q0 13-4.5 25T686-386L440-140q-10 10-22 15t-25 5q-13 0-25-5t-22-15Zm47-506L179-432h428L393-646Zm399 526q-36 0-61-25.5T706-208q0-27 13.5-51t30.5-47l42-54 44 54q16 23 30 47t14 51q0 37-26 62.5T792-120Z" />
+                    </svg>
+                </label>
             </div>
 
-            <div class="flex gap-1">
+            <div class="flex items-center gap-1">
                 <button data-action="new-group" title="New Group"
-                    class="grid place-content-center w-12 h-12 rounded bg-white/5 hover:bg-neutral-400 dark:hover:bg-neutral-900 select-none transition-colors">
+                    class="grid place-content-center size-9 rounded hover:bg-white/15 text-white mix-blend-difference select-none transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"
                         fill="currentColor">
                         <path
@@ -58,8 +83,8 @@
                     </svg>
                 </button>
                 <button data-action="new-tab" title="New Tab"
-                    class="grid place-content-center w-12 h-12 rounded bg-white/5 hover:bg-neutral-400 dark:hover:bg-neutral-900 select-none transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke-width="1.5"
+                    class="grid place-content-center size-9 rounded hover:bg-white/15 text-white mix-blend-difference select-none transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke-width="1.5"
                         color="currentColor" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                             d="M6 12h6m6 0h-6m0 0V6m0 6v6" />

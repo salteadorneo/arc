@@ -10,8 +10,6 @@ const BROWSER = navigator.userAgent.includes('Edg')
       ? 'brave'
       : 'chrome'
 
-const ACTIVE_TAB_CLASSES = ['bg-neutral-300', 'dark:bg-neutral-800']
-
 function init () {
   getTabs()
 
@@ -46,7 +44,7 @@ browserButtons.forEach((element) => {
     if (event.button === 1) {
       const tabId = parseInt(element.dataset.tabId)
       chrome.tabs.remove(tabId)
-      element.classList.remove(...ACTIVE_TAB_CLASSES)
+      element.classList.remove('bg-white/15')
       delete element.dataset.tabId
     }
   }
@@ -152,9 +150,12 @@ function getGroupInfo (groupId) {
 function createTabElement (tab, container) {
   const tabElement = document.createElement('section')
   tabElement.dataset.tabId = tab.id
-  tabElement.className = 'group flex items-center justify-between gap-2 p-2 rounded bg-white/5 hover:bg-neutral-400 dark:hover:bg-neutral-900 select-none transition-colors'
+  tabElement.className = 'group flex items-center justify-between gap-2 p-2 rounded hover:bg-white/15 select-none transition-colors'
   if (tab.active) {
-    tabElement.classList.add(...ACTIVE_TAB_CLASSES)
+    tabElement.classList.add('bg-white/15')
+  }
+  if (tab.pinned) {
+    tabElement.classList.add('bg-white/5')
   }
   tabElement.draggable = true
 
@@ -174,12 +175,12 @@ function createTabElement (tab, container) {
   if (!tab.pinned) {
     const title = document.createElement('span')
     title.innerText = tab.title
-    title.className = 'truncate'
+    title.className = 'truncate text-white mix-blend-difference'
     section.appendChild(title)
 
     const closeButton = document.createElement('button')
     closeButton.innerText = '✖'
-    closeButton.className = 'hidden group-hover:grid place-content-center size-4 outline-none transition-all'
+    closeButton.className = 'hidden group-hover:grid place-content-center size-4 outline-none transition-all text-white mix-blend-difference'
     tabElement.appendChild(closeButton)
 
     closeButton.onclick = (event) => {
@@ -256,9 +257,9 @@ function checkActiveTab () {
     chrome.tabs.query({ windowId: window.id }, (tabs) => {
       tabs.forEach(tab => {
         const element = document.querySelector(`[data-tab-id="${tab.id}"]`)
-        element?.classList.remove(...ACTIVE_TAB_CLASSES)
+        element?.classList.remove('bg-white/15')
         if (tab.active) {
-          element?.classList.add(...ACTIVE_TAB_CLASSES)
+          element?.classList.add('bg-white/15')
         }
       })
     })
@@ -269,7 +270,9 @@ document.querySelectorAll('[data-action=new-tab]').forEach((element) => {
   element.onclick = async () => {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
 
-    const newTab = await chrome.tabs.create({ })
+    const url = element.dataset.url || `${BROWSER}://newtab`
+
+    const newTab = await chrome.tabs.create({ url })
 
     if (tab.groupId !== chrome.tabGroups.TAB_GROUP_ID_NONE) {
       chrome.tabs.group({ groupId: tab.groupId, tabIds: newTab.id })
@@ -284,6 +287,12 @@ document.querySelectorAll('[data-action=new-group]').forEach((element) => {
         chrome.tabGroups.update(groupId, { title: 'Group' })
       })
     })
+  }
+})
+
+document.querySelectorAll('input[type="color"]').forEach((element) => {
+  element.oninput = () => {
+    document.body.style.backgroundColor = element.value
   }
 })
 

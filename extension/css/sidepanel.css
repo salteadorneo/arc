@@ -1,8 +1,27 @@
 ::-webkit-scrollbar {
     width: 4px;
+    height: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
     background-color: #888;
     border-radius: 10px;
+}
+
+[type="color"] {
+    border: none;
+    padding: 0;
+    cursor: pointer;
+
+    &::-webkit-color-swatch-wrapper {
+        padding: 0;
+    }
+
+    &::-webkit-color-swatch {
+        border: 0;
+    }
+
+    &::-moz-color-swatch {
+        border: 0;
+    }
 }
