@@ -1,6 +1,6 @@
 {
   "name": "arc-extension",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A Chrome extension inspired by the Arc browser.",
   "scripts": {},
   "keywords": [],
