@@ -32,6 +32,19 @@ function init () {
   chrome.tabGroups.onMoved.addListener(getTabs)
   chrome.tabGroups.onRemoved.addListener(getTabs)
   chrome.tabGroups.onUpdated.addListener((group) => getGroupInfo(group.id))
+
+  document.addEventListener('contextmenu', (event) => {
+    event.preventDefault()
+    const menu = document.querySelector('#context-menu')
+    menu.style.top = `${event.clientY}px`
+    menu.style.left = `${event.clientX}px`
+    menu.classList.remove('hidden')
+  })
+
+  document.addEventListener('click', () => {
+    const menu = document.querySelector('#context-menu')
+    menu.classList.add('hidden')
+  })
 }
 
 init()

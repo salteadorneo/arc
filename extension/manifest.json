@@ -9,7 +9,8 @@
         "sidePanel",
         "activeTab",
         "scripting",
-        "storage"
+        "storage",
+        "contextMenus"
     ],
     "content_scripts": [
         {
