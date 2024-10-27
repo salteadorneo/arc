@@ -12,8 +12,19 @@
     <main class="flex flex-col justify-between gap-1 py-2 h-screen">
         <section id="pinned" class="px-2 grid grid-flow-col justify-stretch gap-1"></section>
         <section id="tabs" class="flex flex-1 flex-col gap-1 px-2 overflow-x-hidden overflow-y-auto"></section>
+        <section id="archive" class="hidden flex flex-1 flex-col gap-1 px-2 overflow-x-hidden overflow-y-auto">
+        </section>
         <section class="px-2 flex items-center justify-between gap-2">
             <div class="flex items-center gap-1">
+                <button data-action="archive" title="Archive"
+                    class="grid place-content-center size-9 rounded hover:bg-white/15 text-white mix-blend-difference select-none transition-colors disabled:opacity-50">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"
+                        fill="currentColor">
+                        <path
+                            d="M200-80q-33 0-56.5-23.5T120-160v-451q-18-11-29-28.5T80-680v-120q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v120q0 23-11 40.5T840-611v451q0 33-23.5 56.5T760-80H200Zm0-520v440h560v-440H200Zm-40-80h640v-120H160v120Zm200 280h240v-80H360v80Zm120 20Z" />
+                    </svg>
+                </button>
+
                 <button data-browser="downloads" title="Downloads"
                     class="grid place-content-center size-9 rounded hover:bg-white/15 text-white mix-blend-difference select-none transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"
@@ -64,7 +75,7 @@
                     class="grid place-content-center size-9 rounded hover:bg-white/15 text-white mix-blend-difference select-none transition-colors cursor-pointer">
                     <input type="color" title="Theme Color" class="w-0 h-0" /><!--w-8 h-8 rounded-full-->
                     <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"
-                        fill="#e8eaed">
+                        fill="currentColor">
                         <path
                             d="M346-140 100-386q-10-10-15-22t-5-25q0-13 5-25t15-22l230-229-106-106 62-65 400 400q10 10 14.5 22t4.5 25q0 13-4.5 25T686-386L440-140q-10 10-22 15t-25 5q-13 0-25-5t-22-15Zm47-506L179-432h428L393-646Zm399 526q-36 0-61-25.5T706-208q0-27 13.5-51t30.5-47l42-54 44 54q16 23 30 47t14 51q0 37-26 62.5T792-120Z" />
                     </svg>

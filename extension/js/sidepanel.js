@@ -17,7 +17,10 @@ function init () {
 
   chrome.tabs.onCreated.addListener(getTabs)
   chrome.tabs.onMoved.addListener(getTabs)
-  chrome.tabs.onRemoved.addListener(getTabs)
+  chrome.tabs.onRemoved.addListener((tabId) => {
+    getTabs()
+    addTabToArchive(tabId)
+  })
   chrome.tabs.onUpdated.addListener(() => {
     getTabs()
     checkActiveTab()
@@ -52,9 +55,13 @@ browserButtons.forEach((element) => {
   }
 })
 
+let TABS = null
+
 function getTabs () {
   chrome.windows.getCurrent({ populate: true }, (window) => {
     chrome.tabs.query({ windowId: window.id }, (tabs) => {
+      TABS = tabs
+
       const container = document.querySelector('#tabs')
       container.innerHTML = ''
 
@@ -130,6 +137,8 @@ function getTabs () {
         icon: PLUS_ICON,
         'data-action': 'new-tab'
       }, container)
+
+      checkButtonArchive()
     })
   })
 }
@@ -281,6 +290,37 @@ function createTabElement (tab, container) {
   container.appendChild(tabElement)
 }
 
+function createArchiveElement (tab, container) {
+  if (!tab) return
+
+  const tabElement = document.createElement('section')
+  tabElement.dataset.tabId = tab.id
+  tabElement.className = 'group flex items-center justify-between gap-2 p-2 rounded hover:bg-white/15 select-none transition-colors'
+
+  const section = document.createElement('div')
+  section.className = 'flex items-center gap-2 truncate'
+  tabElement.appendChild(section)
+
+  const favicon = document.createElement('img')
+  favicon.src = tab.favIconUrl || ''
+  favicon.className = tab.pinned ? 'size-6' : 'size-4'
+  section.appendChild(favicon)
+
+  const title = document.createElement('span')
+  title.innerText = tab.title
+  title.className = 'truncate text-white mix-blend-difference'
+  section.appendChild(title)
+
+  tabElement.onclick = (e) => {
+    e.stopPropagation()
+    chrome.tabs.create({ url: tab.url })
+    removeTabFromArchive(tab.id)
+    toggleArchive()
+  }
+
+  container.appendChild(tabElement)
+}
+
 function checkActiveTab () {
   chrome.windows.getCurrent({ populate: true }, (window) => {
     chrome.tabs.query({ windowId: window.id }, (tabs) => {
@@ -319,6 +359,43 @@ document.querySelectorAll('[data-action=new-group]').forEach((element) => {
   }
 })
 
+document.querySelectorAll('[data-action=archive]').forEach((element) => {
+  element.onclick = toggleArchive
+})
+
+async function toggleArchive () {
+  document.querySelector('#pinned').classList.toggle('hidden')
+  document.querySelector('#tabs').classList.toggle('hidden')
+  document.querySelector('#archive').classList.toggle('hidden')
+
+  if (!document.querySelector('#archive').classList.contains('hidden')) {
+    chrome.storage.local.get(['archive'], (result) => {
+      const archive = result.archive || []
+      document.querySelector('[data-action=archive]').disabled = !archive.length
+      const container = document.querySelector('#archive')
+      container.innerHTML = ''
+
+      archive.forEach(tab => {
+        createArchiveElement(tab, container)
+      })
+
+      const hr = document.createElement('hr')
+      hr.className = 'mix-blend-difference opacity-25'
+      container.appendChild(hr)
+
+      const button = document.createElement('button')
+      button.innerText = 'Clear Archive'
+      button.className = 'group flex items-center justify-center gap-2 p-2 rounded hover:bg-white/15 select-none transition-colors'
+      button.onclick = () => {
+        clearArchive()
+        document.querySelector('[data-action=archive]').disabled = true
+        toggleArchive()
+      }
+      container.appendChild(button)
+    })
+  }
+}
+
 document.querySelectorAll('input[type="color"]').forEach((element) => {
   chrome.storage.local.get(['color'], (result) => {
     if (!result.color) return
@@ -341,5 +418,32 @@ function activeTabOrCreate (url) {
         chrome.tabs.create({ url, windowId: window.id })
       }
     })
+  })
+}
+
+function addTabToArchive (tabId) {
+  chrome.storage.local.get(['archive'], (result) => {
+    const archive = result.archive || []
+    archive.push(TABS.find(t => t.id === tabId))
+    chrome.storage.local.set({ archive })
+  })
+}
+
+function removeTabFromArchive (tabId) {
+  chrome.storage.local.get(['archive'], (result) => {
+    const archive = result.archive || []
+    document.querySelector('[data-action=archive]').disabled = !archive.length
+    chrome.storage.local.set({ archive: [...archive.filter(t => t.id !== tabId)] })
+  })
+}
+
+function clearArchive () {
+  chrome.storage.local.set({ archive: [] })
+}
+
+function checkButtonArchive () {
+  chrome.storage.local.get(['archive'], (result) => {
+    const archive = result.archive || []
+    document.querySelector('[data-action=archive]').disabled = !archive.length
   })
 }
